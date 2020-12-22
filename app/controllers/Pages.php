@@ -8,6 +8,7 @@
         public function index(){
 
             $data = ['title' => 'Welcome'];
+           //Load Search
             $this->search();
             
            //$this->view('pages/index', $data);

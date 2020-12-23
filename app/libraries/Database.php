@@ -70,6 +70,12 @@
       return $this->stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
+    //instantiate class of each result
+    public function resultSetClass($className){
+      $this->execute();
+      return $this->stmt->fetchAll(PDO::FETCH_CLASS, $className);
+    }
+
     // Get single record as object
     public function single(){
       $this->execute();

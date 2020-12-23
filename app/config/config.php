@@ -4,7 +4,7 @@
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', 'Apple123@');
-define('DB_NAME', 'tmvc');
+define('DB_NAME', 'movierecommendation');
 
     //App Root
   //Gives path to the file  echo __FILE__;

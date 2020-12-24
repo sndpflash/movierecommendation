@@ -32,7 +32,7 @@
 
         public function searchGenreFromReturnedTitleGenres($returnedTitleGenres){
             require_once APPROOT . '/models/Movies.php';
-            $this->db->query('SELECT originalTitle, genres FROM moviedataset WHERE genres = :genres');
+            $this->db->query('SELECT * FROM moviedataset WHERE genres = :genres');
             $this->db->bind(':genres', $returnedTitleGenres);
             $row = $this->db->resultSetClass("Movies");
 

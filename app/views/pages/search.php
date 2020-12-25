@@ -26,7 +26,26 @@
 
 <?php 
     if(isset($data['movieObj']) && !empty($data['movieObj'])){
+        $counter = 0;
         foreach($data['movieObj'] as $obj){
+            
+            $counter = $counter + 1;
+            if($counter == 15){
+            break;
+            }
+            //Make API Request each loop
+
+            $reqdataURL = 'http://www.omdbapi.com/?apikey=b5081197&t=' .urlencode($obj->originalTitle).'&plot=full';
+            $reqJson = file_get_contents($reqdataURL);
+            $reqdataarray = json_decode($reqJson, true);
+
+            $year = $reqdataarray['Year'];
+            $rated = $reqdataarray['Rated'];
+            $runtime=$reqdataarray['Runtime'];
+            $director=$reqdataarray['Director'];
+            $plot=$reqdataarray['Plot'];
+            $imbdrating =$reqdataarray['imdbRating'];
+            $image=$reqdataarray['Poster'];
 ?>
 <div class = "row">
     <div class = "col-md-12 mx-auto">
@@ -36,25 +55,24 @@
             <div class="container">
                 <div class="row">
                     <div class="col">
-                        <img src = "<?php echo URLROOT; ?>/public/images/placeholder.jpg"> <br><br>
+                        <img src = "<?php echo $image; ?> "><br><br>
                             <button type="button" class="btn btn-secondary btn-md ml-4">Watch Trailer</button>
                     </div>
                     <div class="col-6">
-                        <b>Genres:</b> <?php echo $obj->genres; ?> <br>
-                        <b>Video Type:</b> <?php echo $obj->titleType; ?> <br>
-                        <b>Release Year:</b> <?php echo $obj->startYear; ?> <br>
-                        <b>RunTime(min):</b> <?php echo $obj->runtimeMinutes; ?> <br>
-                        <b>isAdult:</b> <?php if($obj->isAdult == '0'){
-                            echo "All Age";
-                        }else{
-                            echo "Age Restricted";
-                        }  ?> <br>
+                        <b>Genres:</b> <?php
+                         foreach($obj->genres as $genres){
+                            echo $genres . ", "; 
+                        }?> <br>
+                        <b>Year:</b> <?php echo $year; ?> <br>
+                        <b>Rated:</b> <?php echo $rated; ?> <br>
+                        <b>RunTime(min):</b> <?php echo $runtime;?> <br>
+                        <b>Director:</b> <?php echo $director;  ?> <br>
 
-                        <b>Description:</b> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra consequat sapien vitae ullamcorper. Nunc in auctor urna. Fusce tempor bibendum orci, eget suscipit purus egestas laoreet. Pellentesque metus augue, blandit in elit non, viverra ultricies erat. Donec iaculis risus ac ultrices ultrices. Sed dapibus, velit at condimentum rhoncus, ex libero facilisis mauris, sit amet egestas metus leo sit amet neque. Duis vitae iaculis magna. Sed accumsan laoreet congue.</p>
+                        <b>Description:</b> <p><?php echo $plot; ?></p>
                     </div>
         
                     <div class="col">
-                        <b> Imbd Rating: Coming Soon</b>
+                        <b> Imbd Rating: <?php echo $imbdrating; ?></b><br>
                         <b> Vote: Coming Soon </b>
                         
                     </div>

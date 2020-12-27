@@ -10,6 +10,19 @@
 
         }
 
+        //live search fetch movie
+        public function liveFetchMovie($title){
+            
+            $this->db->query('SELECT * FROM moviedataset WHERE originalTitle LIKE :title');
+            $this->db->bind(':title', "%".$title."%");
+            $row=$this->db->resultSet();
+            
+            if($this->db->rowCount() > 0) {
+               
+                return $row;
+            }
+        }
+
         public function fetchAll(){
             require_once APPROOT . '/models/Movies.php';
 

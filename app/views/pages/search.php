@@ -1,6 +1,7 @@
 <?php// require APPROOT . '/views/inc/header.php'; ?>
 <?php //require APPROOT . '/views/inc/noticeindex.php'; ?>
 
+
 <div class = "row">
     <div class = "col-md-6 mx-auto">
         <div class = "card card-body bg-light mt-5">
@@ -9,7 +10,10 @@
             <p> Search Movie Names for recommendation </p>
             <form action ="<?php echo URLROOT; ?>/pages/search" method = "post">
                 <div class ="form-group">
-                    <input type = "text" name = "searchTerm"  class="form-control form-control-lg <?php echo (!empty($data['searchTerm_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['searchTerm']; ?>">
+                    <input type = "text" name = "searchTerm" id = "search" class="form-control form-control-lg <?php echo (!empty($data['searchTerm_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['searchTerm']; ?>">
+                    <div id = "livesearch"> 
+                        
+                     </div>
                     <span class="invalid-feedback"><?php echo $data['searchTerm_err']; ?></span>                    
                 </div>
               
@@ -27,11 +31,13 @@
 <?php 
     if(isset($data['movieObj']) && !empty($data['movieObj'])){
         $counter = 0;
+        $maxlimit = 15;
         foreach($data['movieObj'] as $obj){
             
             $counter = $counter + 1;
-            if($counter == 15){
-            break;
+            if($counter == $maxlimit){
+               
+                break;
             }
             //Make API Request each loop
 

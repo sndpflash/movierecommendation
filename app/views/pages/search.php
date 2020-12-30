@@ -8,7 +8,7 @@
             <h2> Movies Similar to </h2>
             
             <p> Search Movie Names for recommendation </p>
-            <form action ="<?php echo URLROOT; ?>/pages/search" method = "post">
+            <form action ="<?php echo URLROOT; ?>/pages/search" method = "post" name = "mainSearch" id = "mainSearch">
                 <div class ="form-group">
                     <input type = "text" name = "searchTerm" id = "search" class="form-control form-control-lg <?php echo (!empty($data['searchTerm_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['searchTerm']; ?>">
                     <div id = "livesearch"> 
@@ -19,7 +19,7 @@
               
                 <div class = "row">
                     <div class = "col">
-                        <input type = "submit" value = "Submit" class = "btn btn-success btn-block">
+                        <input type = "submit" name = 'searchSubmit' value = "Submit" class = "btn btn-success btn-block">
                     </div>
                 </div>
             </form>
@@ -28,10 +28,14 @@
     </div>
 </div>
 
+
 <?php 
     if(isset($data['movieObj']) && !empty($data['movieObj'])){
         $counter = 0;
         $maxlimit = 15;
+        echo"<div class = 'searchHeadingContainer'>";
+        echo "<h2 class= 'searchHeading'> Movies Like "; echo $data['searchTerm']."</h2>";
+        echo"</div>";
         foreach($data['movieObj'] as $obj){
             
             $counter = $counter + 1;
@@ -55,8 +59,9 @@
 ?>
 <div class = "row">
     <div class = "col-md-12 mx-auto">
+    
         <div class = "card card-body bg-light mt-5">
-            <h3> <?php echo $obj->originalTitle; ?></h3><br>
+            <h3><a href="#" onclick="return liveSearchTitle('<?php echo $obj->originalTitle; ?>');"> <?php echo $obj->originalTitle; ?></a></h3><br>
             
             <div class="container">
                 <div class="row">

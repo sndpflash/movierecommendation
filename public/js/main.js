@@ -19,3 +19,14 @@ $(document).ready(function(){
     });
 
 });
+
+
+
+function liveSearchTitle(title){
+    
+  //  $("#search").val(title);
+    $("#search").val(title);    
+    $("#mainSearch").submit();
+    
+}
+

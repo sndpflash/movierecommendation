@@ -28,13 +28,23 @@
             if(strlen($data['liveSearchTerm'] )>= 2){
             $liveSearchMovieRequest = $this->searchModel->liveFetchMovie($data['liveSearchTerm']);
             $counter = 0;
+            if(!empty($liveSearchMovieRequest)){
+                
             foreach($liveSearchMovieRequest as $obj){
                 $counter = $counter + 1;
+                
                 if($counter < 5){
-                  echo "<a href = ''> ";  echo $obj->originalTitle . "</a><br>";
                   
+
+                   ?>
+                <a href = "#" onclick="return liveSearchTitle('<?php echo $obj->originalTitle; ?>');"> <?php echo $obj->originalTitle; ?><br> </a> <?php
+
                 }
             }
+
+        }else{
+            $data['searchTerm_err'] = "No Movie Found";
+        }
         }
             
         }
@@ -61,6 +71,8 @@
 
                 if(empty($data['searchTerm_err'])){
                     //Returns the genre of the customer searched movie title
+                    
+                     
                     $customerSearchTitleGenre = $this->searchModel->fetchMovieobj($data['searchTerm']);
                     
                     if(!empty($customerSearchTitleGenre)){

@@ -70,40 +70,53 @@
                 
 
                 if(empty($data['searchTerm_err'])){
-                    //Returns the genre of the customer searched movie title
-                    
-                     
-                    $customerSearchTitleGenre = $this->searchModel->fetchMovieobj($data['searchTerm']);
-                    
-                    if(!empty($customerSearchTitleGenre)){
-                    //Breaks the genre into array eg. Action|Comedy {action, Comedy}
-                    $customerSearchTitleGenre = explode('|', $customerSearchTitleGenre);
-                    
-                    $movieobj = $this->searchModel->fetchAll();
-                    foreach($movieobj as $obj){
 
-                        $obj->genres = explode('|', $obj->genres);
-                        
-                        foreach($obj->genres as $genres){
-                            
-                            foreach($customerSearchTitleGenre as $searchTitleGenre){
-                                if($genres == $searchTitleGenre){
-                                    $obj->chance = $obj->chance + 1;
-                                }
-                            }
-                            
+                    //get the movieid from the database of user entered movie
+                    
+                    $movieId = $this->searchModel->fetchMovieIdFromGivenMovieTitle($data['searchTerm']);
 
-                        }
+                    if(!empty($movieId)){
+
+                    //get tags that are in the movie id
+                    $movieTags = $this->searchModel->fetchMovieTagsFromID($movieId->id);
+                   
+                    
+                    //We have list of tags in the movie id of searched title, lets get movie id list based on the tags 
+                    $listOfMovieIdObjectsWithSameTag = array();
+
+                    foreach($movieTags as $tags){
+                        $movieIdWithSameTags = $this->searchModel->fetchMovieIdRelatedToGivenTags($tags->tags);
+                        $listOfMovieIdObjectsWithSameTag[] = $movieIdWithSameTags;    
                     }
-                        
+
                     
 
-                
-                    usort($movieobj, function($a, $b){
-                    return strcmp($b->chance, $a->chance);
-                    });                 
+                    $listOfSingleMovieId = array();
+                    foreach($listOfMovieIdObjectsWithSameTag as $obj){
+                        foreach($obj as $singleMovieId){
+                            $listOfSingleMovieId[]=$singleMovieId->id;
+                        }   
+                    }
+                   
                     
-                    $data['movieObj'] = $movieobj;
+                    $countReOccurance = array_count_values($listOfSingleMovieId);
+                    arsort($countReOccurance);
+                    
+                    $finalMovieList = array();
+                    $loopCount=0;
+                    foreach($countReOccurance as $key => $value){
+                        if($loopCount > 20){
+                            break;
+                        }
+                        $finalMovies = $this->searchModel->fetchMovieById($key);
+                        $finalMovieList[] = $finalMovies;
+                        $loopCount++;
+                    }
+
+            
+                  
+
+                    $data['movieObj'] = $finalMovieList;
                     $this->view('pages/index', $data);
 
                 }else{
@@ -131,8 +144,8 @@
         }
 
                
+    
     }
-
 
 
 ?>

@@ -69,6 +69,58 @@
             }
         }
 
+        public function fetchMovieTagsFromID($movieId){
+
+            $this->db->query('SELECT tags FROM movietags where id = :id');
+            $this->db->bind(':id', $movieId);
+            $row = $this->db->resultSet();
+
+            if($this->db->rowCount()>0){
+                return $row;
+            }
+        }
+
+
+        public function fetchSimilarTagsFromGivenTags($tags){
+            $this->db->query('SELECT tags FROM movietags where tags = :tags');
+            $this->db->bind(':tags', $tags);
+            $row = $this->db->resultSet();
+
+            if($this->db->rowCount()>0){
+                return $row;
+            }
+        }
+
+        public function fetchMovieIdRelatedToGivenTags($tags){
+            $this->db->query('SELECT id FROM movietags WHERE tags = :tags');
+            $this->db->bind(':tags', $tags);
+            $row = $this->db->resultSet();
+
+            if($this->db->rowCount()>0){
+                return $row;
+            }
+        }
+
+        public function fetchMovieIdFromGivenMovieTitle($movie){
+            $this->db->query('SELECT id FROM moviedataset WHERE originalTitle = :movieTitle');
+            $this->db->bind(':movieTitle', $movie);
+            $row = $this->db->single();
+
+            if($this->db->rowCount()>0){
+                return $row;
+            }
+        }
+
+        public function fetchMovieById($id){
+            $this->db->query('SELECT * FROM moviedataset WHERE id = :id');
+            $this->db->bind(':id', $id);
+            $row = $this->db->single();
+
+            if($this->db->rowCount()>0){
+                return $row;
+            }
+        }
+
     }
 
 

@@ -31,21 +31,23 @@
 
 <?php 
     if(isset($data['movieObj']) && !empty($data['movieObj'])){
-        $counter = 0;
-        $maxlimit = 15;
+       
+
         echo"<div class = 'searchHeadingContainer'>";
         echo "<h2 class= 'searchHeading'> Movies Like "; echo $data['searchTerm']."</h2>";
         echo"</div>";
         foreach($data['movieObj'] as $obj){
+            $movieTitle=$obj->originalTitle;
+            $movieGenre = $obj->genres;
+            $movieGenre = explode("|", $movieGenre);
             
-            $counter = $counter + 1;
-            if($counter == $maxlimit){
-               
-                break;
-            }
+            $re = "/\\(.*/"; 
+           
+            $filteredmovieTitle=preg_replace($re, "",$movieTitle);
+            $filteredmovieTitle=preg_replace('/^([^,]*).*$/', '$1', $filteredmovieTitle);
             //Make API Request each loop
 
-            $reqdataURL = 'http://www.omdbapi.com/?apikey=b5081197&t=' .urlencode($obj->originalTitle).'&plot=full';
+            $reqdataURL = 'http://www.omdbapi.com/?apikey=b5081197&t=' .urlencode($filteredmovieTitle).'&plot=full';
             $reqJson = file_get_contents($reqdataURL);
             $reqdataarray = json_decode($reqJson, true);
 
@@ -71,7 +73,7 @@
                     </div>
                     <div class="col-6">
                         <b>Genres:</b> <?php
-                         foreach($obj->genres as $genres){
+                         foreach($movieGenre as $genres){
                             echo $genres . ", "; 
                         }?> <br>
                         <b>Year:</b> <?php echo $year; ?> <br>

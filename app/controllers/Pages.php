@@ -1,4 +1,6 @@
 <?php
+ header('Access-Control-Allow-Origin: *'); 
+
 
     class Pages extends Controller{
 
@@ -12,7 +14,7 @@
             
             
            //Load Search
-           $this->search();
+           $this->search(NULL);
           
           //  $this->genrestoarray();
            //$this->view('pages/index', $data);
@@ -23,6 +25,7 @@
         }
 
         public function liveSearch(){
+			
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
             $data=['liveSearchTerm'=>trim($_POST['name']), 'searchTerm_err' => '', 'returnedMovieTitle'=>''];
             if(strlen($data['liveSearchTerm'] )>= 2){
@@ -34,10 +37,12 @@
                 $counter = $counter + 1;
                 
                 if($counter < 5){
-                  
+                    $movieFilteredSpace = preg_replace('/[[:space:]]+/', '-', $obj->originalTitle);
 
                    ?>
-                <a href = "#" onclick="return liveSearchTitle('<?php echo $obj->originalTitle; ?>');"> <?php echo $obj->originalTitle; ?><br> </a> <?php
+                   
+
+                <a href = "<?php echo URLROOT; ?>/pages/search/<?php echo $movieFilteredSpace; ?>"> <?php echo $obj->originalTitle; ?><br> </a> <?php
 
                 }
             }
@@ -55,32 +60,34 @@
         }
 
 
-        public function search(){
+        public function search($title=NULL){
+            
+            
+            if($title == NULL){
 
-          
-            if($_SERVER['REQUEST_METHOD'] == 'POST'){
-          
-                $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-                $data=['searchTerm'=>trim($_POST['searchTerm']), 'searchTerm_err' => '', 'movieTitle'=>'', 'movieObj'=>''];
+                //Init data
+                $data=['searchTerm' => '', 'searchTerm_err' => ''];
 
-                if(empty($data['searchTerm'])){
-                    $data['searchTerm_err'] = "Please enter Search Term";
-                }
-     
-                
+                $this->view('pages/index', $data);
+            }else {
+
+            $titleReplaceDashWithSpace = preg_replace('/[\-_]/',' ',$title);
+           
+           // $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data=['searchTerm'=>trim($titleReplaceDashWithSpace), 'searchTerm_err' => '', 'movieTitle'=>'', 'movieObj'=>''];
 
                 if(empty($data['searchTerm_err'])){
 
                     //get the movieid from the database of user entered movie
-                    
+                   
                     $movieId = $this->searchModel->fetchMovieIdFromGivenMovieTitle($data['searchTerm']);
-
+                   
                     if(!empty($movieId)){
 
                     //get tags that are in the movie id
                     $movieTags = $this->searchModel->fetchMovieTagsFromID($movieId->id);
                    
-                    
+                   
                     //We have list of tags in the movie id of searched title, lets get movie id list based on the tags 
                     $listOfMovieIdObjectsWithSameTag = array();
 
@@ -88,7 +95,7 @@
                         $movieIdWithSameTags = $this->searchModel->fetchMovieIdRelatedToGivenTags($tags->tags);
                         $listOfMovieIdObjectsWithSameTag[] = $movieIdWithSameTags;    
                     }
-
+                   
                     
 
                     $listOfSingleMovieId = array();
@@ -117,6 +124,7 @@
                   
 
                     $data['movieObj'] = $finalMovieList;
+                   
                     $this->view('pages/index', $data);
 
                 }else{
@@ -131,21 +139,19 @@
                     $this->view('pages/index', $data);
                 }
 
-            }else{
-
+            
+            }
                 
-                //Init data
-                $data=['searchTerm' => '', 'searchTerm_err' => ''];
-
-                $this->view('pages/index', $data);
+                
                
             }
+        
             
         }
 
                
     
-    }
+    
 
 
 ?>

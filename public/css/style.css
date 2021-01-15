@@ -6,4 +6,9 @@
   justify-content: center
 
 }
+.imggrid {
+  width: 200px; /* You can set the dimensions to whatever you want */
+  height: 300px;
+  object-fit: cover;
+}
 

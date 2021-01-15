@@ -121,6 +121,17 @@
             }
         }
 
+        public function fetchAllMovies(){
+
+            $this->db->query('SELECT * FROM moviedataset');
+            $row=$this->db->resultSet();
+            if($this->db->rowCount()>0){
+                return $row;
+            }
+
+
+        }
+
     }
 
 

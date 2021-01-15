@@ -107,8 +107,10 @@
                    
                     
                     $countReOccurance = array_count_values($listOfSingleMovieId);
-                    arsort($countReOccurance);
                     
+                    arsort($countReOccurance);
+            
+
                     $finalMovieList = array();
                     $loopCount=0;
                     foreach($countReOccurance as $key => $value){

@@ -28,7 +28,7 @@
 			
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
             $data=['liveSearchTerm'=>trim($_POST['name']), 'searchTerm_err' => '', 'returnedMovieTitle'=>''];
-            if(strlen($data['liveSearchTerm'] )>= 2){
+            if(strlen($data['liveSearchTerm'] )>= 0){
             $liveSearchMovieRequest = $this->searchModel->liveFetchMovie($data['liveSearchTerm']);
             $counter = 0;
             if(!empty($liveSearchMovieRequest)){
@@ -36,7 +36,7 @@
             foreach($liveSearchMovieRequest as $obj){
                 $counter = $counter + 1;
                 
-                if($counter < 5){
+                if($counter < 8){
                     $movieFilteredSpace = preg_replace('/[[:space:]]+/', '-', $obj->originalTitle);
 
                    ?>
@@ -62,13 +62,38 @@
 
         public function search($title=NULL){
             
-            
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && $title == NULL) {
+                $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+                $data['searchTerm'] = trim($_POST['searchTerm']);
+                if(strlen($data['searchTerm'] )>= 3){
+                $likeMovies = $this->searchModel->fetchlikeMovies($data['searchTerm']);
+                }
+                if(!empty($likeMovies)){
+                    if(count($likeMovies) > 1){
+                        $data['suggestionList'] = $likeMovies;
+                        $this->view('pages/index', $data);                        
+                    }else{
+                       
+                        $this->search($likeMovies[0]->originalTitle);
+                        
+                    }
+                }else{
+                    $data['searchTerm_err'] = 'No Movie Found! Try Selecting from the List';
+                    $this->view('pages/index', $data);
+                }
+                
+                
+
+            }
             if($title == NULL){
 
                 //Init data
-                $data=['searchTerm' => '', 'searchTerm_err' => ''];
+                $data=['searchTerm' => '', 'searchTerm_err' => '', 'suggestionList'=> ''];
 
                 $this->view('pages/index', $data);
+            
+                
+                
             }else {
 
             $titleReplaceDashWithSpace = preg_replace('/[\-_]/',' ',$title);

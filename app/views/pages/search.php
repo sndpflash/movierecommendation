@@ -12,7 +12,29 @@
                     <div id = "livesearch"> 
                         
                      </div>
-                    <span class="invalid-feedback"><?php echo $data['searchTerm_err']; ?></span>                    
+                    <span class="invalid-feedback"><?php echo $data['searchTerm_err']; ?></span>   
+                   
+                   
+                    
+                        <?php 
+                        if(!empty($data['suggestionList'])){
+                            
+                         echo "<div class='alert alert-info' role='alert'>";
+                         echo "<h4> Do you mean? Try selecting from the List </h4>";
+                        foreach($data['suggestionList'] as $obj){
+                            $movieFilteredSpace = preg_replace('/[[:space:]]+/', '-', $obj->originalTitle);
+
+                            ?>
+                            
+                            <a href="<?php echo URLROOT; ?>/pages/search/<?php echo $movieFilteredSpace; ?>"> <?php echo $obj->originalTitle; ?></a><br>
+
+                            <?php
+
+                        }
+                        echo "</div>";
+                    }
+                         ?>
+                    
                 </div>
               
                 <div class = "row">

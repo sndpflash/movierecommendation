@@ -14,7 +14,7 @@
         public function liveFetchMovie($title){
             
             $this->db->query('SELECT * FROM moviedataset WHERE originalTitle LIKE :title');
-            $this->db->bind(':title', "%".$title."%");
+            $this->db->bind(':title', $title."%");
             $row=$this->db->resultSet();
             
             if($this->db->rowCount() > 0) {
@@ -135,7 +135,7 @@
         public function fetchlikeMovies($title){
 
             $this->db->query('SELECT originalTitle FROM moviedataset WHERE originalTitle LIKE :title');
-            $this->db->bind(':title', "%".$title."%");
+            $this->db->bind(':title', $title."%");
 
             $row=$this->db->resultSet();
             if($this->db->rowCount()>0){

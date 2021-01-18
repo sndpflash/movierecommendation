@@ -1,8 +1,8 @@
 
 
-<div class = "row">
-    <div class = "col-md-6 mx-auto">
-        <div class = "card card-body bg-light mt-5">
+<div class = "row ">
+    <div class = "col-md-6 mx-auto  searchbox">
+        <div class = "card card-body bg-light   ">
             <h2> Movies Similar to </h2>
             
             <p> Search Movie Names for recommendation </p>

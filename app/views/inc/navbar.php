@@ -6,9 +6,16 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="<?php echo URLROOT; ?>">Home <span class="sr-only">(current)</span></a>
-          </li>
+
+        <?php if(isset($_SESSION['user_id'])){
+
+         echo "<li class='nav-item active'>";
+         echo "<a class='nav-link' href='";echo URLROOT;echo"/dashboard'>Home <span class='sr-only'>(current)</span></a></li>";
+
+        }
+
+        ?>
+          
           <li class="nav-item active">
             <a class="nav-link" href="<?php echo URLROOT; ?>/movies">Browse Movies <span class="sr-only">(current)</span></a>
           </li>

@@ -8,7 +8,7 @@ class Dashboard extends Controller{
         }
 
         $this->dashboardModel = $this->model('Upload');
-        $this->searchModel=$this->model('search');
+        $this->searchModel=$this->model('Search');
     }
 
     

@@ -71,6 +71,7 @@ function loadMovies(){
     var option = document.createElement("option");
     option.value = movieTitle;
     option.innerHTML=movieTitle;
+    option.id=movieTitle;
     x.add(option);
     option.innerHTML = movieTitle;
    
@@ -91,9 +92,16 @@ function loadMovies(){
                 // for(var i=0; i<response.length; i++){
                 //     $("#returnedtags").append("<li class='list-group-item'  value='"+response[i].tags +"'>" +response[i].tags +"<input type='hidden' name = 'tagshiddenfield'  value='"+response[i].tags +"'> <i class='fas fa-trash pl-4' id = 'removeButton'></i></li>");
                 // }
+                var idforDiv = movieTitle.split(" ");
+                idforDiv = idforDiv[0];
+                $("#returnedtags").append("<div id = '"+idforDiv+"tags'> </div>");
+                // if(response == undefined){
+                //     $("#returnedtags").append("<div id = 'warning'>No Tags found select more movies </div>");
 
+                // }
                 for(var i=0; i<response.length; i++){
-                    $("#returnedtags").append("<input class='form-check-input' type = 'checkbox' name = 'moviesTag[]' value='"+response[i].tags +"'>" +response[i].tags+ "<br>"); 
+
+                    $("#"+idforDiv+"tags").append("<input class='form-check-input' type = 'checkbox' name = 'moviesTag[]' value='"+response[i].tags +"'>" +response[i].tags+ "<br>"); 
                 }
     
 
@@ -106,12 +114,21 @@ function loadMovies(){
    
 }
 
-// function removeSelected(){
-//     var x = document.getElementById("returnedtags");
-//     x.remove(x.selectedIndex);
-// }
+function removeSelectedMovieItem(){
+    
+    var x = document.getElementById("selectedMovies");
+    var id = x[x.selectedIndex].id;
+    var element = document.getElementById("returnedtags"); //parent element
+    x.remove(x.selectedIndex);
 
-$("#returnedtags").on("click", "#removeButton", function(e) {
-    e.preventDefault();
-    $(this).parent().remove();
-});
+
+    var idforDiv = id.split(" ");
+    idforDiv = idforDiv[0]+"tags";
+    document.getElementById(idforDiv).remove();
+
+      
+
+
+
+}
+
